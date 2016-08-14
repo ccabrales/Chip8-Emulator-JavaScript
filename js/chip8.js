@@ -43,7 +43,58 @@ class Chip8 {
     }
 
     cycle() {
+        // Able to read as a single number when joining them
+        let opCode = this.memory[this.pc] << 8 | this.memory[this.pc + 1];
 
+        // Read the first portion to classify the code, then can nest further for more classification
+        switch (opCode & 0xF000) {
+            case 0x0000:
+
+                switch (opCode) {
+                    // CLS - Clear Screen
+                    case 0x00E0:
+
+                        break;
+
+                    // RET - Return from subroutine
+                    case 0x00EE:
+                        break;
+
+                }
+                break;
+            case 0x1000:
+                break;
+            case 0x2000:
+                break;
+            case 0x3000:
+                break;
+            case 0x4000:
+                break;
+            case 0x5000:
+                break;
+            case 0x6000:
+                break;
+            case 0x7000:
+                break;
+            case 0x8000:
+                break;
+            case 0x9000:
+                break;
+            case 0xA000:
+                break;
+            case 0xB000:
+                break;
+            case 0xC000:
+                break;
+            case 0xD000:
+                break;
+            case 0xE000:
+                break;
+            case 0xF000:
+                break;
+            default:
+                throw new Error("Invalid opcode " + opCode.toString(16) + " received. Quitting now.");
+        }
     }
 
     reset() {
