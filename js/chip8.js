@@ -7,9 +7,20 @@
  */
 
 class Chip8 {
+
+    requestAnimFrame() {
+        for (let i = 0; i < NUM_CYCLES; i++) {
+            this.cycle();
+        }
+    }
+
+    cycle() {
+
+    }
+
     reset() {
         //Program Counter
-        this.pc = 0x200;
+        this.pc = DEFAULT_PC;
 
         // Memory
         this.memory = new Uint8Array(4096);
@@ -31,6 +42,5 @@ class Chip8 {
 
         // Sound Timer
         this.soundTimer = 0;
-
     }
 }
