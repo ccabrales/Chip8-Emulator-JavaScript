@@ -8,6 +8,34 @@
 
 class Chip8 {
 
+    constructor() {
+        this.displayHeight = DISPLAY_HEIGHT;
+        this.displayWidth = DISPLAY_WIDTH;
+        this.display = new Array(displayHeight * displayWidth);
+
+        this.step = null;
+        this.running = null;
+
+        let mem = new ArrayBuffer(MEM_SIZE);
+        this.memory = new Uint8Array(mem);
+
+        this.stack = new Array(16);
+        this.sp = null;
+        this.v = new Uint8Array(16);
+        this.i = null;
+        this.delayTimer = null;
+        this.delayTimer = null;
+
+        this.renderer = null;
+        this.keys = {};
+
+        this.reset();
+    }
+
+    setRenderer(renderer) {
+        this.renderer = renderer;
+    }
+
     requestAnimFrame() {
         for (let i = 0; i < NUM_CYCLES; i++) {
             this.cycle();
