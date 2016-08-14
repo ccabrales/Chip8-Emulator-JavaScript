@@ -102,16 +102,22 @@ class Chip8 {
         this.pc = DEFAULT_PC;
 
         // Memory
-        this.memory = new Uint8Array(4096);
+        for (let i = 0; i < MEM_SIZE; i++) {
+            this.memory[i] = 0;
+        }
 
-        // Stack
-        this.stack = new Array(16);
+        //Display
+        for (let i = 0; i < display.length; i++) {
+            this.display[i] = 0;
+        }
 
         // Stack Pointer
         this.sp = 0;
 
         // "V" Registers
-        this.v = new Uint8Array(16);
+        for (let i = 0; i < this.v.length; i++) {
+            v[i] = 0;
+        }
 
         // "I" Register
         this.i = 0;
@@ -121,5 +127,8 @@ class Chip8 {
 
         // Sound Timer
         this.soundTimer = 0;
+
+        this.step = 0;
+        this.running = false;
     }
 }
