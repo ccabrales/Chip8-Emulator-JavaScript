@@ -11,7 +11,7 @@ class Chip8 {
     constructor() {
         this.displayHeight = DISPLAY_HEIGHT;
         this.displayWidth = DISPLAY_WIDTH;
-        this.display = new Array(displayHeight * displayWidth);
+        this.display = new Array(this.displayHeight * this.displayWidth);
 
         this.step = null;
         this.running = null;
@@ -109,13 +109,13 @@ class Chip8 {
         this.running = false;
     }
 
-    cycle() {
+    emulateCycle() {
         // Able to read as a single number when joining them
         let opCode = this.memory[this.pc] << 8 | this.memory[this.pc + 1];
         let x = (opCode & 0x0F00) >> 8;
         let y = (opCode & 0x00F0) >> 4;
 
-        // Increment pc by 2 and decrement sound and delay
+        // Increment pc by 2
         this.pc += 2;
 
         // Read the first portion to classify the code, then can nest further for more classification
@@ -137,6 +137,8 @@ class Chip8 {
                         this.pc = stack[--this.sp];
                         break;
 
+                    default:
+                        throw new Error("Invalid opcode " + opCode.toString(16) + " received. Quitting now.");
                 }
                 break;
 
@@ -265,6 +267,9 @@ class Chip8 {
                         this.v[0xF] = this.v[x] & 0x8;
                         this.v[x] <<= 1;
                         break;
+
+                    default:
+                        throw new Error("Invalid opcode " + opCode.toString(16) + " received. Quitting now.");
                 }
                 break;
 
@@ -305,15 +310,15 @@ class Chip8 {
 
                 // Go row by row for outer loop, and inner loop go column by column
                 for (let i = 0; i < height; i++) {
-                    let sprite = this.memory[this.i + i];
+                    let pixelRow = this.memory[this.i + i];
                     for (let j = 0; j < width; j++) {
                         // check for whether highest bit is 1 and there is an overlap/flipping pixels b/c of it
-                        if ((sprite & 0x80) > 0 && this.setPixel(this.v[x] + j, this.v[y] + i)) {
+                        if ((pixelRow & 0x80) > 0 && this.setPixel(this.v[x] + j, this.v[y] + i)) {
                             this.v[0xF] = 1;
                         }
-                        sprite <<= 1; // shift left by one every iteration to get every bit as highest to test
+                        pixelRow <<= 1; // shift left by one every iteration to get every bit as highest to test
                     }
-                    this.shouldDraw = true;
+                    this.drawFlag = true;
                 }
                 break;
 
@@ -335,6 +340,9 @@ class Chip8 {
                             this.pc += 2;
                         }
                         break;
+
+                    default:
+                        throw new Error("Invalid opcode " + opCode.toString(16) + " received. Quitting now.");
                 }
                 break;
 
@@ -409,8 +417,11 @@ class Chip8 {
                             this.v[i] = this.memory[this.i + i];
                         }
                         break;
+                    default:
+                        throw new Error("Invalid opcode " + opCode.toString(16) + " received. Quitting now.");
                 }
                 break;
+
             default:
                 throw new Error("Invalid opcode " + opCode.toString(16) + " received. Quitting now.");
         }
@@ -449,11 +460,6 @@ class Chip8 {
 
         this.step = 0;
         this.running = false;
-
-        this.setupKeys();
     }
 
-    setupKeys() {
-
-    }
 }
