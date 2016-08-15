@@ -356,13 +356,27 @@ class Chip8 {
                         break;
 
                     // LD FX0A
-                        // wait for key press, then store in Vx
+                        // wait for key press, then store in Vx. all execution stops until the key press
                         //TODO
                     case 0x000A:
-                        let oldKey = this.setKey;
-                        this.setKey = (key) => {
-                            this.v[x] = key;
+                        this.stop();
+                        let keyPressed = false;
+
+                        for (let i = 0; i < 16; i++) {
+                            if (this.keys[i]) {
+                                this.v[x] = i;
+                                keyPressed = true;
+                            }
                         }
+
+                        // skip and try again if no key was pressed. rewind pc
+                        if (!keyPressed) {
+                            this.pc -= 2;
+                            return;
+                        }
+
+                        this.start();
+
                         break;
 
                     // LD FX15
@@ -431,9 +445,33 @@ class Chip8 {
         //Program Counter
         this.pc = DEFAULT_PC;
 
-        // Memory
+        // Memory reset
         for (let i = 0; i < MEM_SIZE; i++) {
             this.memory[i] = 0;
+        }
+
+        // Load Fontset
+        let fontSet = [
+            0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
+            0x20, 0x60, 0x20, 0x20, 0x70, // 1
+            0xF0, 0x10, 0xF0, 0x80, 0xF0, // 2
+            0xF0, 0x10, 0xF0, 0x10, 0xF0, // 3
+            0x90, 0x90, 0xF0, 0x10, 0x10, // 4
+            0xF0, 0x80, 0xF0, 0x10, 0xF0, // 5
+            0xF0, 0x80, 0xF0, 0x90, 0xF0, // 6
+            0xF0, 0x10, 0x20, 0x40, 0x40, // 7
+            0xF0, 0x90, 0xF0, 0x90, 0xF0, // 8
+            0xF0, 0x90, 0xF0, 0x10, 0xF0, // 9
+            0xF0, 0x90, 0xF0, 0x90, 0x90, // A
+            0xE0, 0x90, 0xE0, 0x90, 0xE0, // B
+            0xF0, 0x80, 0x80, 0x80, 0xF0, // C
+            0xE0, 0x90, 0x90, 0x90, 0xE0, // D
+            0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
+            0xF0, 0x80, 0xF0, 0x80, 0x80 // F
+        ];
+
+        for (let i = 0; i < fontSet.length; i++) {
+            this.memory[i] = fontSet[i];
         }
 
         //Display
