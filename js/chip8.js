@@ -51,22 +51,36 @@ class Chip8 {
         this.keys[key] = false;
     }
 
-    //TODO
     setPixel(x, y) {
+        // check for out of bounds, to wrap the pixel
+        if (y < 0) {
+            y += this.displayHeight;
+        } else if (y > this.displayHeight) {
+            y -= this.displayHeight;
+        }
+        if (x < 0) {
+            x += this.displayWidth;
+        } else if (x > this.displayWidth) {
+            x -= this.displayWidth;
+        }
 
+        let displayIndex = (y * this.displayWidth) + x;
+        this.display ^= 1;
+
+        return !this.display[displayIndex];
     }
 
     // Main loop that emulates the device cycles
     requestAnimFrame() {
         for (let i = 0; i < NUM_CYCLES; i++) {
             if (this.running) {
-                this.cycle();
+                this.emulateCycle();
             }
         }
 
-        if (this.shouldDraw) {
+        if (this.drawFlag) {
             this.renderer.render(this.display);
-            this.shouldDraw = false;
+            this.drawFlag = false;
         }
 
         if (this.step % 2 === 0) {
