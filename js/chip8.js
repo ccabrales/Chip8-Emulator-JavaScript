@@ -32,10 +32,31 @@ class Chip8 {
         this.reset();
     }
 
+    // Load the program into memory
+    loadProgram(program) {
+        for (let i = 0; i < program.length; i++) {
+            this.memory[i + DEFAULT_PC] = program[i];
+        }
+    }
+
     setRenderer(renderer) {
         this.renderer = renderer;
     }
 
+    setKey(key) {
+        this.keys[key] = true;
+    }
+
+    unsetKey(key) {
+        this.keys[key] = false;
+    }
+
+    //TODO
+    setPixel(x, y) {
+
+    }
+
+    //TODO
     requestAnimFrame() {
         for (let i = 0; i < NUM_CYCLES; i++) {
             this.cycle();
