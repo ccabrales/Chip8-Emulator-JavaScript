@@ -8,7 +8,7 @@ class Renderer {
 
     }
 
-    render() {
+    render(display) {
 
     }
 
