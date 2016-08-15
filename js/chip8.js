@@ -284,14 +284,23 @@ class Chip8 {
                 // draws a sprite at coordinate (Vx, Vy) with a width of 8 pixels and height of N pixels
                 // each row of 8 pixels is read as a bit-coded starting from memory location I
                 // VF is set to 1 if any screen pixels are flipped from set to unset when the sprite is drawn, 0 otherwise
-            // TODO
             case 0xD000:
                 let width = 8;
                 let height = opCode & 0x000F;
                 this.v[0xF] = 0;
 
-                // for (let )
-                // this.shouldDraw = true;
+                // Go row by row for outer loop, and inner loop go column by column
+                for (let i = 0; i < height; i++) {
+                    let sprite = this.memory[this.i + i];
+                    for (let j = 0; j < width; j++) {
+                        // check for whether highest bit is 1 and there is an overlap/flipping pixels b/c of it
+                        if ((sprite & 0x80) > 0 && this.setPixel(this.v[x] + j, this.v[y] + i)) {
+                            this.v[0xF] = 1;
+                        }
+                        sprite <<= 1; // shift left by one every iteration to get every bit as highest to test
+                    }
+                    this.shouldDraw = true;
+                }
                 break;
 
             case 0xE000:
