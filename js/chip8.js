@@ -475,7 +475,7 @@ class Chip8 {
         }
 
         //Display
-        for (let i = 0; i < display.length; i++) {
+        for (let i = 0; i < this.display.length; i++) {
             this.display[i] = 0;
         }
 
@@ -484,7 +484,7 @@ class Chip8 {
 
         // "V" Registers
         for (let i = 0; i < this.v.length; i++) {
-            v[i] = 0;
+            this.v[i] = 0;
         }
 
         // "I" Register
