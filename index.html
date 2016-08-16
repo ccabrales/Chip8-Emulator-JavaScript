@@ -10,8 +10,46 @@
 
     <h1>Chip-8 Emulator</h1>
 
-    <!--Form for loading a program file, along with options for gamepad, colors, full screen, etc.-->
+    <!--Forms for loading a program file, along with options for gamepad, colors, full screen, etc.-->
+    <section id="forms">
+        <form id="program-form" action="">
+            <fieldset>
+                <label for="program">Program</label>
+                <select name="program" id="program"></select>
+            </fieldset>
+        </form>
 
+        <form id="color-form" action="">
+            <fieldset>
+                <label for="color">Color</label>
+                <input id="color" type="color" value="#00FF00" />
+            </fieldset>
+        </form>
+
+        <form id="gamepad-form" action="">
+            <fieldset>
+                <label for="gamepad"></label>
+                <input type="checkbox" id="gamepad" value="true" checked="checked" />
+                <button id="test-gamepad" type="button">Test Gamepad</button>
+            </fieldset>
+        </form>
+
+        <form id="fullscreen-button" action="">
+            <fieldset>
+                <button id="fullscreen" type="button">Fullscreen</button>
+            </fieldset>
+        </form>
+    </section>
+
+    <!--Canvas-->
+    <canvas id="canvas"></canvas>
+
+    <dl>
+        <dt>Current Program</dt>
+            <dd id="current-program">None Loaded</dd>
+        <dt>FPS</dt>
+            <dd id="fps">0</dd>
+    </dl>
 
     <p>Use the keys below, or use a gamepad if enabled to interact with the Chip-8 emulator.</p>
 
@@ -41,21 +79,15 @@
     <script src="js/gamepad.js"></script>
     <script src="js/renderer.js"></script>
     <script src="js/chip8.js"></script>
+    <script src="js/main.js"></script>
 
     <!--Main script to be run with page-->
     <script>
-        // TODO
+        window.onload = function() {
+            let main = new Main();
+            main.start();
+        }
     </script>
 
 </body>
-
-<!--var xhr = new XMLHttpRequest;-->
-<!--xhr.open("GET", "programs/invaders", true);-->
-<!--xhr.responseType = "arraybuffer";-->
-
-<!--xhr.onload = function () {-->
-<!--var program = new Uint8Array(xhr.response);-->
-<!--};-->
-
-<!--xhr.send();-->
 </html>
