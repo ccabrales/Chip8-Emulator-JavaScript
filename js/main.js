@@ -84,11 +84,11 @@ class Main {
             return "on" + prefix + "fullscreenchange";
         };
 
-        var fullScreenEvent = ["", "webkit", "moz"].filter(function(prefix) {
+        let fullScreenEvent = ["", "webkit", "moz"].filter(function(prefix) {
             return document.hasOwnProperty(makeEvent(prefix));
         }).map(function(prefix) { return makeEvent(prefix); })[0];
 
-        var getFullScreenElement = function () {
+        let getFullScreenElement = function () {
             return document.fullscreenElement ||
                 document.webkitFullscreenElement ||
                 document.mozFullscreenElement;
@@ -107,28 +107,54 @@ class Main {
                 return;
             }
 
-            var width = screen.width;
-            var height = screen.height;
+            let width = screen.width;
+            let height = screen.height;
 
-            var chWidth = this.canvas.getDisplayWidth();
-            var chHeight = this.canvas.getDisplayHeight();
+            let chWidth = this.canvas.getDisplayWidth();
+            let chHeight = this.canvas.getDisplayHeight();
 
-            var cellsWidth = Math.floor(width / chWidth) - 1;
-            var cellsHeight = Math.floor(height / chHeight) - 1;
+            let cellsWidth = Math.floor(width / chWidth) - 1;
+            let cellsHeight = Math.floor(height / chHeight) - 1;
 
-            var cellSize = Math.min(cellsWidth, cellsHeight);
+            let cellSize = Math.min(cellsWidth, cellsHeight);
 
             this.renderer.setCellSize(cellSize);
         };
     }
 
-    //TODO
     keyHandlers() {
+        let translateKeys = {
+            49: 0x1,  // 1
+            50: 0x2,  // 2
+            51: 0x3,  // 3
+            52: 0x4,  // 4
+            81: 0x5,  // Q
+            87: 0x6,  // W
+            69: 0x7,  // E
+            82: 0x8,  // R
+            65: 0x9,  // A
+            83: 0xA,  // S
+            68: 0xB,  // D
+            70: 0xC,  // F
+            90: 0xD,  // Z
+            88: 0xE,  // X
+            67: 0xF,  // C
+            86: 0x10  // V
+        };
 
+        document.addEventListener("keydown", (e) => {
+            this.chip8.setKey(translateKeys[e.keyCode]);
+        });
+
+        document.addEventListener("keyup", (e) => {
+            this.chip8.unsetKey(translateKeys[e.keyCode]);
+        });
     }
 
-    //TODO
     fpsManager() {
-
+        let fps = document.getElementById("fps");
+        setInterval(() => {
+            fps.textContent = this.renderer.getFPS().toPrecision(3);
+        }, 1e3);
     }
 }

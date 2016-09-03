@@ -11,7 +11,7 @@ class Renderer {
 
         this.prevRender = [];
         this.prevDraw = 0;
-        this.totDraws = 0;
+        this.toDraws = 0;
 
         this.fgColor = fgColor;
         this.bgColor = bgColor;
@@ -38,7 +38,7 @@ class Renderer {
             this.ctx.fillRect(newX, newY, this.cellSize, this.cellSize);
         }
 
-        this.totDraws++;
+        this.toDraws++;
     }
 
     // Play a sound or shake the screen if audio isn't supported
@@ -76,8 +76,13 @@ class Renderer {
         this.fgColor = fgColor;
     }
 
-    //TODO
     getFPS() {
-
+        let fps = this.toDraws / (+new Date - this.prevDraw) * 1000;
+        if (fps === Infinity) {
+            return 0;
+        }
+        this.toDraws = 0;
+        this.prevDraw = +new Date;
+        return fps;
     }
 }
