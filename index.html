@@ -15,7 +15,7 @@
         <form id="program-form" action="">
             <fieldset>
                 <label for="program">Program</label>
-                <select name="program" id="program"></select>
+                <select name="program" id="program"><option></option></select>
             </fieldset>
         </form>
 
@@ -73,9 +73,10 @@
     </ol>
 
 
-
+    <audio id="blip" src="sounds/blip.wav" autostart="false"></audio>
     <!--Scripts-->
     <script src="js/constants.js"></script>
+    <script src="js/polyfills.js"></script>
     <script src="js/gamepad.js"></script>
     <script src="js/renderer.js"></script>
     <script src="js/chip8.js"></script>
