@@ -65,44 +65,43 @@ class Chip8 {
         }
 
         let displayIndex = (y * this.displayWidth) + x;
-        this.display ^= 1;
+        this.display[displayIndex] ^= 1;
 
         return !this.display[displayIndex];
     }
 
-    // Main loop that emulates the device cycles
-    requestAnimFrame() {
-        for (let i = 0; i < NUM_CYCLES; i++) {
-            if (this.running) {
-                this.emulateCycle();
-            }
-        }
-
-        if (this.drawFlag) {
-            this.renderer.render(this.display);
-            this.drawFlag = false;
-        }
-
-        if (this.step % 2 === 0) {
-            this.step++;
-            if (this.delayTimer > 0) {
-                this.delayTimer--;
-            }
-            if (this.soundTimer > 0) {
-                this.soundTimer--;
-                if (this.soundTimer === 0) {
-                    this.renderer.beep();
-                }
-            }
-        }
-
-        window.requestAnimationFrame(this.requestAnimFrame);
-    }
-
     start() {
         this.running = true;
+        let self = this;
 
-        window.requestAnimationFrame(this.requestAnimFrame);
+        requestAnimFrame(function me() {
+            for (let i = 0; i < NUM_CYCLES; i++) {
+                if (self.running) {
+                    self.emulateCycle();
+                }
+            }
+
+            if (self.drawFlag) {
+                self.renderer.render(self.display);
+                self.drawFlag = false;
+            }
+
+            if (!(self.step++ % 2)) {
+                if (self.delayTimer > 0) {
+                    self.delayTimer--;
+                }
+                if (self.soundTimer > 0) {
+                    self.soundTimer--;
+                    if (self.soundTimer === 0) {
+                        self.renderer.beep();
+                    }
+                }
+            }
+
+            requestAnimFrame(me);
+        });
+
+        // window.requestAnimationFrame(this.requestAnimFrame);
     }
 
     stop() {
@@ -134,7 +133,7 @@ class Chip8 {
 
                     // RET - Return from subroutine
                     case 0x00EE:
-                        this.pc = stack[--this.sp];
+                        this.pc = this.stack[--this.sp];
                         break;
 
                     default:
@@ -307,11 +306,12 @@ class Chip8 {
                 let width = 8;
                 let height = opCode & 0x000F;
                 this.v[0xF] = 0;
+                let i, j, pixelRow;
 
                 // Go row by row for outer loop, and inner loop go column by column
-                for (let i = 0; i < height; i++) {
-                    let pixelRow = this.memory[this.i + i];
-                    for (let j = 0; j < width; j++) {
+                for (i = 0; i < height; i++) {
+                    pixelRow = this.memory[this.i + i];
+                    for (j = 0; j < width; j++) {
                         // check for whether highest bit is 1 and there is an overlap/flipping pixels b/c of it
                         if ((pixelRow & 0x80) > 0 && this.setPixel(this.v[x] + j, this.v[y] + i)) {
                             this.v[0xF] = 1;
