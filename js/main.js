@@ -26,18 +26,19 @@ class Main {
     }
 
     programFormSetup() {
-        this.progForm = document.getElementById("program");
-        this.currProgram = document.getElementById("current-program");
-        this.programList = ["15PUZZLE", "BLINKY", "BLITZ", "BRIX", "CONNECT4", "GUESS", "HIDDEN", "IBM", "INVADERS", "KALEID", "MAZE", "MERLIN", "MISSILE", "PONG", "PONG2", "PUZZLE", "SYZYGY", "TANK", "TETRIS", "TICTAC", "UFO", "VBRIX", "VERS", "WIPEOFF"];
+        let progForm = document.getElementById("program");
+        let currProgram = document.getElementById("current-program");
+        let programList = ["15PUZZLE", "BLINKY", "BLITZ", "BRIX", "CONNECT4", "GUESS", "HIDDEN", "IBM", "INVADERS", "KALEID", "MAZE", "MERLIN", "MISSILE", "PONG", "PONG2", "PUZZLE", "SYZYGY", "TANK", "TETRIS", "TICTAC", "UFO", "VBRIX", "VERS", "WIPEOFF"];
 
-        for (let p of this.programList) {
+        for (let p of programList) {
             let option = document.createElement("option");
             option.textContent = p;
-            this.progForm.add(option);
+            progForm.add(option);
         }
 
-        this.progForm.addEventListener('change', (e) => {
-            let val = this.progForm.value;
+        let self = this;
+        progForm.addEventListener('change', function(e) {
+            let val = progForm.value;
 
             if (!val) {
                 alert("Please select a ROM to play");
@@ -49,16 +50,16 @@ class Main {
             xhr.responseType = "arraybuffer";
 
             xhr.onload = () => {
-                this.chip8.stop();
-                this.chip8.reset();
-                this.chip8.loadProgram(new Uint8Array(xhr.response));
-                this.chip8.start();
+                self.chip8.stop();
+                self.chip8.reset();
+                self.chip8.loadProgram(new Uint8Array(xhr.response));
+                self.chip8.start();
 
-                this.currProgram.textContent = val;
+                currProgram.textContent = val;
             };
 
             xhr.send();
-            e.blur();//TODO - yes?
+            this.blur();
         });
     }
 
@@ -74,7 +75,6 @@ class Main {
 
     }
 
-    //TODO
     fullscreenFormSetup() {
         let launchFullScreen = (this.canvas.requestFullScreen ||
         this.canvas.mozRequestFullScreen ||

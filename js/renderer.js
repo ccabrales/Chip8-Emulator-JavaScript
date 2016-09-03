@@ -43,24 +43,8 @@ class Renderer {
 
     // Play a sound or shake the screen if audio isn't supported
     beep() {
-        if (this.audioCtx) {
-            let oscillatorNode = this.audioCtx.createOscillator();
-            oscillatorNode.start(0);
-            setTimeout(function() {
-                oscillatorNode.stop(0);
-            }, 100);
-            return;
-        }
-
-        let timesRun = 5;
-        let interval = setInterval(function(canvas) {
-           if (timesRun < 0) {
-               clearInterval(interval);
-           }
-
-           timesRun--;
-            canvas.style.right = timesRun % 2 === 0 ? "3px" : "-3px";
-        }, 50, this.canvas);
+        let sound = document.getElementById("blip");
+        sound.play();
     }
 
     setCellSize(cellSize) {
