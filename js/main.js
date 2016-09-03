@@ -64,23 +64,70 @@ class Main {
 
     colorFormSetup() {
         this.colorSelector = document.getElementById("color");
-        this.colorSelector.addEventListener((e) => {
+        this.colorSelector.addEventListener("change", (e) => {
             this.chip8.renderer.setFgColor(this.colorSelector.value);
         });
     }
 
+    //TODO
     gamepadSupport() {
-        
+
     }
 
+    //TODO
     fullscreenFormSetup() {
+        let launchFullScreen = (this.canvas.requestFullScreen ||
+        this.canvas.mozRequestFullScreen ||
+        this.canvas.webkitRequestFullScreen).bind(this.canvas, Element.ALLOW_KEYBOARD_INPUT);
 
+        let makeEvent = function(prefix) {
+            return "on" + prefix + "fullscreenchange";
+        };
+
+        var fullScreenEvent = ["", "webkit", "moz"].filter(function(prefix) {
+            return document.hasOwnProperty(makeEvent(prefix));
+        }).map(function(prefix) { return makeEvent(prefix); })[0];
+
+        var getFullScreenElement = function () {
+            return document.fullscreenElement ||
+                document.webkitFullscreenElement ||
+                document.mozFullscreenElement;
+        };
+        document.querySelector("#fullscreen").addEventListener("click", function() {
+            if ( ! launchFullScreen) {
+                alert("Full screen not supported.");
+            } else {
+                launchFullScreen();
+            }
+        });
+
+        document[fullScreenEvent] = function() {
+            if ( ! getFullScreenElement()) {
+                this.renderer.setCellSize(CELL_SIZE);
+                return;
+            }
+
+            var width = screen.width;
+            var height = screen.height;
+
+            var chWidth = this.canvas.getDisplayWidth();
+            var chHeight = this.canvas.getDisplayHeight();
+
+            var cellsWidth = Math.floor(width / chWidth) - 1;
+            var cellsHeight = Math.floor(height / chHeight) - 1;
+
+            var cellSize = Math.min(cellsWidth, cellsHeight);
+
+            this.renderer.setCellSize(cellSize);
+        };
     }
 
+    //TODO
     keyHandlers() {
 
     }
 
+    //TODO
     fpsManager() {
 
     }
