@@ -361,25 +361,16 @@ class Chip8 {
 
                     // LD FX0A
                         // wait for key press, then store in Vx. all execution stops until the key press
-                        //TODO - test
                     case 0x000A:
                         this.stop();
                         let keyPressed = false;
-
-                        for (let i = 0; i < 16; i++) {
-                            if (this.keys[i]) {
-                                this.v[x] = i;
-                                keyPressed = true;
-                            }
-                        }
-
-                        // skip and try again if no key was pressed. rewind pc
-                        if (!keyPressed) {
-                            this.pc -= 2;
-                            return;
-                        }
-
-                        this.start();
+                        let oldKeyDown = this.setKey;
+                        this.setKey = key => {
+                            this.v[x] = key;
+                            this.setKey = oldKeyDown.bind(this);
+                            this.setKey.apply(this, arguments);
+                            this.start();
+                        };
 
                         break;
 
