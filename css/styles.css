@@ -1,10 +1,77 @@
 /*TODO*/
 
+@font-face {
+    font-family: PressStart2P;
+    src: url('../fonts/PressStart2P.ttf');
+}
+
+body {
+    font-size: 85%;
+}
+
+h1 {
+    font-family: PressStart2P;
+}
+
+label {
+    font-weight: bold;
+}
+
+#forms {
+    display: flex;
+    align-items: center;
+}
+
+fieldset {
+    border: none;
+    margin: -5px;
+}
+
+#color {
+    margin: 0 10px -8px 0;
+}
+
 canvas {
     background: #000;
 }
 
 /*Make these not have numbers, and also be in like a keypad shape thing*/
 ol {
+    list-style: none;
+    padding: 0px;
+    width: 120px;
+}
 
+li {
+    display: inline-block;
+    margin: 0px 8px 8px 0px;
+}
+
+kbd {
+    padding: 2px 6px;
+    background: #efefef;
+    border-radius: 3px;
+    font-size: 12px;
+    box-shadow: 1px 1px 1px #ddd;
+}
+
+dl {
+    overflow: hidden;
+}
+
+label:after,
+dt:after {
+    content: ":";
+}
+
+dt {
+    font-weight: bold;
+    width: 40px;
+    float: left;
+    clear: left;
+}
+
+dd {
+    float: left;
+    margin-bottom: 6px;
 }
