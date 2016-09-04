@@ -70,9 +70,59 @@ class Main {
         });
     }
 
-    //TODO
     gamepadSupport() {
+        let checkbox = document.getElementById("gamepad");
+        let test = document.getElementById("test-gamepad");
+        let gamepadId = false;
 
+        checkbox.checked = Gamepad.supported;
+
+        let gamepad = new Gamepad((gamepads) => {
+            let gamepad = gamepads[0];
+            let buttons, axes;
+
+            if (!gamepad) return;
+
+            axes = gamepad.axes;
+            this.chip8.setKeyState(2, axes[1] == 1); // Up
+            this.chip8.setKeyState(8, axes[1] == -1); // Down
+            this.chip8.setKeyState(4, axes[0] == -1); // Left
+            this.chip8.setKeyState(6, axes[0] == 1); // Right
+
+            buttons = gamepad.buttons;
+            this.chip8.setKeyState(1, buttons[0]);
+            this.chip8.setKeyState(3, buttons[1]);
+            this.chip8.setKeyState(5, buttons[2]);
+            this.chip8.setKeyState(7, buttons[3]);
+            this.chip8.setKeyState(9, buttons[4]);
+            this.chip8.setKeyState(10, buttons[5]);
+            this.chip8.setKeyState(11, buttons[6]);
+            this.chip8.setKeyState(12, buttons[7]);
+            this.chip8.setKeyState(13, buttons[8]);
+            this.chip8.setKeyState(14, buttons[9]);
+
+            gamepadId = gamepad.id;
+        });
+
+        Gamepad.supported && gamepad.start();
+
+        checkbox.addEventListener('click', function() {
+            if (!Gamepad.supported) {
+                alert("Your browser doesn't support gamepads.");
+                this.checked = false;
+                return;
+            }
+
+            gamepad[['stop', 'start'][+this.checked]]();
+        });
+
+        test.addEventListener('click', function() {
+            if (gamepadId === false) {
+                alert("No gamepad detected. Try pressing a button on it.");
+            } else {
+                alert("Gamepad detected: " + gamepadId);
+            }
+        });
     }
 
     fullscreenFormSetup() {

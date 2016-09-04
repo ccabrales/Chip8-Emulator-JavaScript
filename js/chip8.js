@@ -51,6 +51,10 @@ class Chip8 {
         this.keys[key] = false;
     }
 
+    setKeyState (key, depressed) {
+        this[["unset", "set"][+depressed] + "Key"](key);
+    }
+
     setPixel(x, y) {
         // check for out of bounds, to wrap the pixel
         if (y < 0) {
@@ -357,7 +361,7 @@ class Chip8 {
 
                     // LD FX0A
                         // wait for key press, then store in Vx. all execution stops until the key press
-                        //TODO
+                        //TODO - test
                     case 0x000A:
                         this.stop();
                         let keyPressed = false;

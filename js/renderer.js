@@ -17,8 +17,6 @@ class Renderer {
         this.bgColor = bgColor;
 
         this.setCellSize(cellSize);
-
-        this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     }
 
     clear() {
@@ -31,9 +29,8 @@ class Renderer {
 
         for (let i = 0; i < display.length; i++) {
             let newX = (i % this.width) * this.cellSize;
-            let newY = Math.floor(i / this.width) * this.cellSize;;
+            let newY = Math.floor(i / this.width) * this.cellSize;
 
-            //TODO - what exactly does this do?
             this.ctx.fillStyle = [this.bgColor, this.fgColor][display[i]];
             this.ctx.fillRect(newX, newY, this.cellSize, this.cellSize);
         }
